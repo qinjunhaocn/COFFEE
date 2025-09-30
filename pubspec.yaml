@@ -34,6 +34,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  
+  # 支持Material You的动态颜色（莫奈取色）
+  # 用于从系统壁纸提取颜色并应用到应用中
+  dynamic_color: ^1.7.0
 
 dev_dependencies:
   flutter_test:
