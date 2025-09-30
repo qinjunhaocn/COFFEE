@@ -8,7 +8,7 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // 默认的主题颜色，当系统不支持动态颜色时使用
+  // 默认的浅色主题颜色，当系统不支持动态颜色时使用
   static final defaultLightColorScheme = ColorScheme.fromSeed(
     seedColor: Colors.brown,
     brightness: Brightness.light,
@@ -16,6 +16,20 @@ class MyApp extends StatelessWidget {
     secondary: Colors.amber[600],
     onPrimary: Colors.white,
     onSecondary: Colors.black,
+  );
+  
+  // 默认的深色主题颜色，当系统不支持动态颜色时使用
+  static final defaultDarkColorScheme = ColorScheme.fromSeed(
+    seedColor: Colors.brown,
+    brightness: Brightness.dark,
+    primary: Colors.brown[400],
+    secondary: Colors.amber[400],
+    onPrimary: Colors.black,
+    onSecondary: Colors.black,
+    background: Colors.grey[900],
+    surface: Colors.grey[800],
+    onBackground: Colors.white,
+    onSurface: Colors.white,
   );
 
   @override
@@ -62,11 +76,54 @@ class MyApp extends StatelessWidget {
           ),
         ),
       );
+      
+      // 创建深色主题配置
+      final darkTheme = ThemeData(
+        useMaterial3: true,
+        colorScheme: darkDynamic ?? defaultDarkColorScheme,
+        // 配置Material You特有的元素
+        cardTheme: CardThemeData(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          surfaceTintColor: Colors.transparent,
+        ),
+        // 配置按钮风格为Material You样式
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            elevation: 0,
+            shadowColor: Colors.transparent,
+          ),
+        ),
+        // 配置输入框样式
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          filled: true,
+        ),
+        // 配置文本样式
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            fontWeight: FontWeight.w600,
+          ),
+          titleMedium: TextStyle(
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
 
       // 返回MaterialApp，使用动态生成的主题
+      // 设置themeMode为ThemeMode.system，使应用跟随系统的深浅色模式切换
       return MaterialApp(
         title: 'COFFEE',
         theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeMode.system,
         home: const CoffeeHomePage(),
       );
     });
