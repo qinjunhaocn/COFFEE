@@ -8,7 +8,7 @@ on:
       flutterVersion:
         description: 'Flutter SDK version'
         required: false
-        default: '3.19.6'
+        default: '3.35.5'
 
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: ${{ github.event.inputs.flutterVersion || '3.19.6' }}
+          flutter-version: ${{ github.event.inputs.flutterVersion || '3.35.5' }}
 
       - name: Cache Flutter dependencies
         uses: actions/cache@v3
