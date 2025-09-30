@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: lightDynamic ?? defaultLightColorScheme,
         // 配置Material You特有的元素
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
