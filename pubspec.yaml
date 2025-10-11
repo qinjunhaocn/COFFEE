@@ -38,9 +38,6 @@ dependencies:
   # 支持Material You的动态颜色（莫奈取色）
   # 用于从系统壁纸提取颜色并应用到应用中
   dynamic_color: ^1.7.0
-  
-  # 用于实现设备震动反馈
-  vibrate: ^0.5.0
 
 dev_dependencies:
   flutter_test:
