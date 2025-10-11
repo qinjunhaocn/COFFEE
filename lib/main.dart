@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dynamic_color/dynamic_color.dart';
+import 'package:vibrate/vibrate.dart';
 
 void main() {
   runApp(const MyApp());
@@ -172,6 +173,9 @@ class _CoffeeHomePageState extends State<CoffeeHomePage> {
                 child: Switch(
                   value: _isSwitched,
                   onChanged: (bool value) {
+                    // 触发震动反馈
+                    Vibrate.feedback(FeedbackType.light);
+                    
                     setState(() {
                       _isSwitched = value;
                     });
