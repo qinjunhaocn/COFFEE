@@ -130,8 +130,15 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class CoffeeHomePage extends StatelessWidget {
+class CoffeeHomePage extends StatefulWidget {
   const CoffeeHomePage({super.key});
+
+  @override
+  State<CoffeeHomePage> createState() => _CoffeeHomePageState();
+}
+
+class _CoffeeHomePageState extends State<CoffeeHomePage> {
+  bool _isSwitched = false;
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +160,44 @@ class CoffeeHomePage extends StatelessWidget {
         color: colorScheme.background,
         width: double.infinity,
         height: double.infinity,
-        // 可以在这里添加更多Material You风格的控件
+        // 使用Center将开关居中显示
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // 添加Material Design风格的开关组件
+              // 通过transform.scale属性使开关变大
+              Transform.scale(
+                scale: 2.0, // 将开关放大2倍
+                child: Switch(
+                  value: _isSwitched,
+                  onChanged: (bool value) {
+                    setState(() {
+                      _isSwitched = value;
+                    });
+                  },
+                  // 使用Material You的主题颜色
+                  activeColor: colorScheme.primary,
+                  activeTrackColor: colorScheme.primary.withOpacity(0.3),
+                  // 为开关添加动画效果
+                  animationDuration: const Duration(milliseconds: 300),
+                ),
+              ),
+              // 添加一个文本标签来指示开关状态
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Text(
+                  _isSwitched ? '已开启' : '已关闭',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: colorScheme.onBackground,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
