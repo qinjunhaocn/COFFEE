@@ -179,8 +179,6 @@ class _CoffeeHomePageState extends State<CoffeeHomePage> {
                   // 使用Material You的主题颜色
                   activeColor: colorScheme.primary,
                   activeTrackColor: colorScheme.primary.withOpacity(0.3),
-                  // 为开关添加动画效果
-                  animationDuration: const Duration(milliseconds: 300),
                 ),
               ),
               // 添加一个文本标签来指示开关状态
