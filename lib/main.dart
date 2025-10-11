@@ -125,20 +125,86 @@ class MyApp extends StatelessWidget {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: ThemeMode.system,
-        home: const CoffeeHomePage(),
+        home: const MainPage(),
       );
     });
   }
 }
 
-class CoffeeHomePage extends StatefulWidget {
-  const CoffeeHomePage({super.key});
+// 主页面，包含底部导航栏和Fragment切换
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<CoffeeHomePage> createState() => _CoffeeHomePageState();
+  State<MainPage> createState() => _MainPageState();
 }
 
-class _CoffeeHomePageState extends State<CoffeeHomePage> {
+class _MainPageState extends State<MainPage> {
+  int _currentIndex = 0;
+
+  // 定义各个Fragment页面
+  final List<Widget> _pages = [
+    const CoffeeFragment(),
+    const SettingsFragment(),
+  ];
+
+  // 底部导航栏项目
+  final List<BottomNavigationBarItem> _items = [
+    BottomNavigationBarItem(
+      icon: const Icon(Icons.coffee),
+      label: 'COFFEE',
+    ),
+    BottomNavigationBarItem(
+      icon: const Icon(Icons.settings),
+      label: '设置',
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
+    return Scaffold(
+      // 使用Material You的AppBar样式，背景色通过surfaceTintColor自动处理
+      appBar: AppBar(
+        title: Text(_currentIndex == 0 ? 'COFFEE' : '设置'),
+        // 使用surfaceTintColor而不是直接设置backgroundColor
+        // 这样系统会自动应用Material You的背景色处理规则
+        surfaceTintColor: colorScheme.primary,
+        // 启用Material You的动态阴影效果
+        elevation: 2,
+      ),
+      body: _pages[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (int index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: _items,
+        // 使用Material 3风格的底部导航栏
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: colorScheme.primary,
+        unselectedItemColor: colorScheme.onSurface.withOpacity(0.6),
+        backgroundColor: colorScheme.surface,
+        elevation: 8,
+        // 配置导航栏的外观以符合Material 3设计
+        showUnselectedLabels: true,
+      ),
+    );
+  }
+}
+
+// COFFEE Fragment，包含原来的开关功能
+class CoffeeFragment extends StatefulWidget {
+  const CoffeeFragment({super.key});
+
+  @override
+  State<CoffeeFragment> createState() => _CoffeeFragmentState();
+}
+
+class _CoffeeFragmentState extends State<CoffeeFragment> {
   bool _isSwitched = false;
 
   @override
@@ -146,58 +212,71 @@ class _CoffeeHomePageState extends State<CoffeeHomePage> {
     // 获取主题颜色，以便在整个应用中保持一致的Material You风格
     final colorScheme = Theme.of(context).colorScheme;
     
-    return Scaffold(
-      // 使用Material You的AppBar样式，背景色通过surfaceTintColor自动处理
-      appBar: AppBar(
-        title: const Text('COFFEE'),
-        // 使用surfaceTintColor而不是直接设置backgroundColor
-        // 这样系统会自动应用Material You的背景色处理规则
-        surfaceTintColor: colorScheme.primary,
-        // 启用Material You的动态阴影效果
-        elevation: 2,
+    return Container(
+      color: colorScheme.background,
+      width: double.infinity,
+      height: double.infinity,
+      // 使用Center将开关居中显示
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // 添加Material Design风格的开关组件
+            // 通过transform.scale属性使开关变大
+            Transform.scale(
+              scale: 2.0, // 将开关放大2倍
+              child: Switch(
+                value: _isSwitched,
+                onChanged: (bool value) {
+                  // 触发震动反馈
+                  HapticFeedback.lightImpact();
+                  
+                  setState(() {
+                    _isSwitched = value;
+                  });
+                },
+                // 使用Material You的主题颜色
+                activeColor: colorScheme.primary,
+                activeTrackColor: colorScheme.primary.withOpacity(0.3),
+              ),
+            ),
+            // 添加一个文本标签来指示开关状态
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Text(
+                _isSwitched ? '已开启' : '已关闭',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: colorScheme.onBackground,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-      // 主体内容使用colorScheme.background确保与Material You主题一致
-      body: Container(
-        color: colorScheme.background,
-        width: double.infinity,
-        height: double.infinity,
-        // 使用Center将开关居中显示
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // 添加Material Design风格的开关组件
-              // 通过transform.scale属性使开关变大
-              Transform.scale(
-                scale: 2.0, // 将开关放大2倍
-                child: Switch(
-                  value: _isSwitched,
-                  onChanged: (bool value) {
-                    // 触发震动反馈
-                    HapticFeedback.lightImpact();
-                    
-                    setState(() {
-                      _isSwitched = value;
-                    });
-                  },
-                  // 使用Material You的主题颜色
-                  activeColor: colorScheme.primary,
-                  activeTrackColor: colorScheme.primary.withOpacity(0.3),
-                ),
-              ),
-              // 添加一个文本标签来指示开关状态
-              Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Text(
-                  _isSwitched ? '已开启' : '已关闭',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: colorScheme.onBackground,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            ],
+    );
+  }
+}
+// 设置Fragment，作为第二个页面
+class SettingsFragment extends StatelessWidget {
+  const SettingsFragment({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    
+    return Container(
+      color: colorScheme.background,
+      width: double.infinity,
+      height: double.infinity,
+      child: Center(
+        child: Text(
+          '设置页面',
+          style: TextStyle(
+            fontSize: 24,
+            color: colorScheme.onBackground,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
